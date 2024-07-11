@@ -1,5 +1,4 @@
-'''We can run this code by running "bash run_docker.sh"
-re module is for regex.
+'''re module is for regex.
 argparse for taking command line arguments.
 netaddr to validate ip.'''
 import re
