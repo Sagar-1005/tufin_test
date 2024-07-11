@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#We can run this code by running "bash run_docker.sh"
 # Create empty output file to ensure file exists.
 touch coalesce_output.csv
 

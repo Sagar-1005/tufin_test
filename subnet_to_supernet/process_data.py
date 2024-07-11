@@ -1,4 +1,5 @@
-'''re module is for regex.
+'''We can run this code by running "bash run_docker.sh"
+re module is for regex.
 argparse for taking command line arguments.
 netaddr to validate ip.'''
 import re
@@ -58,7 +59,7 @@ def data_filter_create_supernet(id_entries):
         r"^(\d{1,3}\.){3}\d{1,3}/(\d{1,3}\.){3}\d{1,3}",
     ]
     for each_entry in id_entries_list:
-        if each_entry=="0.0.0.0/0.0.0.0":
+        if each_entry=="0.0.0.0/0.0.0.0": # Changing default route to any as example output is having any
             each_entry = "Any"
         each_entry=each_entry.strip()
         if any(re.match(pattern,each_entry) for pattern in valid_patterns): #Checking whether input is  valid.
