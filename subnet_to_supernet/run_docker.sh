@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Create empty output file to ensure file exists.
+touch coalesce_output.csv
+
 # Build the Docker image
 docker build -t subnet_processor .
 

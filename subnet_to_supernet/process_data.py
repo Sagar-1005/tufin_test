@@ -51,7 +51,7 @@ def data_filter_create_supernet(id_entries):
     }
     id_entries_list=id_entries.strip().split(",")
     valid_patterns= [
-        r"^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$",
+        r"^(\d{1,3}\.){3}\d{1,3}/([0-9]|[12][0-9]|[3][0-2])$",
         r"^(\d{1,3}\.){3}\d{1,3}/(\d{1,3}\.){3}\d{1,3}",
     ]
     for each_entry in id_entries_list:
