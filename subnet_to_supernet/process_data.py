@@ -25,7 +25,10 @@ def process_input_ouput(input_file,output_file):
                 else:
                     output_data.append(f"{id_num},{super_net_details}")
             else:
-                output_data.append(f"{id_num},{id_entry}")
+                if id_entry == "0.0.0.0/0.0.0.0": # Changing default route to any as example output is having any
+                    output_data.append(f"{id_num},Any")
+                else:
+                    output_data.append(f"{id_num},{id_entry}")
     sorted_output= sorted(output_data, key=lambda x:x.split(",")[0]) # Sorting the final output
     with open(output_file,"w",encoding='utf-8') as csvfile:
         for each_line in sorted_output:
@@ -55,6 +58,8 @@ def data_filter_create_supernet(id_entries):
         r"^(\d{1,3}\.){3}\d{1,3}/(\d{1,3}\.){3}\d{1,3}",
     ]
     for each_entry in id_entries_list:
+        if each_entry=="0.0.0.0/0.0.0.0":
+            each_entry = "Any"
         each_entry=each_entry.strip()
         if any(re.match(pattern,each_entry) for pattern in valid_patterns): #Checking whether input is  valid.
             try:
