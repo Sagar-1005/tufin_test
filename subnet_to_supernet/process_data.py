@@ -1,6 +1,8 @@
 import re
 import ipaddress
 import argparse
+from netaddr import *
+from pprint import pprint
 
 def process_input_ouput(input_file,output_file):
     output_data=[]
@@ -18,6 +20,7 @@ def process_input_ouput(input_file,output_file):
     with open(output_file,"w") as file:
         for each_entry in output_data:
             file.write(each_entry)
+    pprint(output_data)
     print(f"Output file created successfully: {output_file}")
 
 def data_filter(id_entries):
@@ -31,20 +34,25 @@ def data_filter(id_entries):
         r"^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$",
         r"^(\d{1,3}\.){3}\d{1,3}/(\d{1,3}\.){3}\d{1,3}",
     ]
+    # print(id_entries_list)
     for each_entry in id_entries_list:
+        each_entry=each_entry.strip()
         if any(re.match(pattern,each_entry) for pattern in valid_patterns):
             try:
                 if re.match(valid_patterns[1],each_entry):
-                    entries['valid_enteries'].append(ipaddress.IPv4Network(each_entry))
+                    ip,subnet=each_entry.split('/')
+                    cidr=IPAddress(subnet).netmask_bits()
+                    entries['valid_enteries'].append(f"{ip}/{cidr}")
                 else:
                     entries['valid_enteries'].append(each_entry)
             except ValueError:
                 entries['invalid_entries'].append(each_entry)
         else:
             entries['invalid_entries'].append(each_entry)
-    supernet=list(ipaddress.collapse_addresses(entries['valid_enteries']))
+    supernet= cidr_merge(entries['valid_enteries'])
     for ip in supernet:
         supernet_ip.append(str(ip))
+    print(supernet_ip)
     return ";".join(supernet_ip),";".join(entries['invalid_entries'])
 
 if __name__=="__main__":
