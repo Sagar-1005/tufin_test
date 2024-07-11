@@ -9,17 +9,20 @@ def process_input_ouput(input_file,output_file):
     print(f"Reading the input file: {input_file}")
     with open(input_file) as input_data:
         for each_line in input_data:
-            if len(each_line.split(":")[1].split(","))>1:
-                super_net,invalid_entries= data_filter(each_line.split(":")[1])
+            id,id_entry=each_line.split(":")
+            if len(id_entry.split(","))>1:
+                super_net,invalid_entries= data_filter(id_entry)
                 if invalid_entries:
-                    output_data.append(f"{each_line.split(':')[0]},{super_net};{invalid_entries}")
+                    output_data.append(f"{id},{super_net};{invalid_entries}")
                 else:
-                    output_data.append(f"{each_line.split(':')[0]},{super_net}")
+                    output_data.append(f"{id},{super_net}")
             else:
-                output_data.append(f"{each_line.split(':')[0]},{each_line.split(':')[1]}")
-    with open(output_file,"w") as file:
-        for each_entry in output_data:
-            file.write(each_entry)
+                output_data.append(f"{id},{id_entry}")
+    sorted_output= sorted(output_data, key=lambda x:x[0])
+    with open(output_file,"w") as csvfile:
+        for each_line in sorted_output:
+            if each_line:
+                csvfile.write(f"{each_line}\n")
     pprint(output_data)
     print(f"Output file created successfully: {output_file}")
 
@@ -52,7 +55,6 @@ def data_filter(id_entries):
     supernet= cidr_merge(entries['valid_enteries'])
     for ip in supernet:
         supernet_ip.append(str(ip))
-    print(supernet_ip)
     return ";".join(supernet_ip),";".join(entries['invalid_entries'])
 
 if __name__=="__main__":
@@ -62,4 +64,3 @@ if __name__=="__main__":
     
     args=parser.parse_args()
     process_input_ouput(args.input_file,args.output_file)
-    
